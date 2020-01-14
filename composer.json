@@ -1,0 +1,11 @@
+{
+    "require": {
+        "codeception/codeception": "*",
+        "cijic/phpmorphy": "^0.3.1"
+    },
+    "require-dev": {
+        "codeception/module-asserts": "^1.1",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-webdriver": "^1.0"
+    }
+}

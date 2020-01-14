@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>driverpack test</title>
+</head>
+<body>
+<h1>Get a solution to the problem</h1>
+<form action="api.php" method="POST" class="form"><input name="symptom" placeholder="symptom" class="symptom" type="search"><button type="submit" class="submit">Submit</button></form>
+<div class="results"></div>
+<script>
+    if( typeof window.fetch === 'function' ) {
+        document.querySelector( '.form' ).addEventListener(
+            'submit',
+            async ( event ) => {
+
+                event.preventDefault();
+
+                let results = document.querySelector( '.results' );
+                let symptom = document.querySelector( '.symptom' ).value;
+                let url = document.location.href + 'api.php';
+                let formBody = JSON.stringify( { symptom: symptom } );
+
+                let rawResponse = await fetch( url, {
+
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'text/html' },
+                    body: formBody
+
+                });
+
+                let response = await rawResponse.text();
+
+                if( response.length > 0 ) {
+                    results.innerHTML = response;
+                }
+                else {
+                    results.innerHTML = 'Не удалось получить результаты поиска';
+                }
+            }
+        );
+    }
+</script>
+</body>
+</html>
