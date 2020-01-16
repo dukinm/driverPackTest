@@ -4,13 +4,34 @@
     <title>driverpack test</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7F1919">
     <meta name="description" content="We will solve an issue at a time">
     <link rel="stylesheet" href="/template/styles/main.css">
+    <link rel="shortcut icon" href="/template/images/apple-touch-icon-ipad-76x76.png">
+    <link rel="apple-touch-icon" href="/template/images/touch-icon-iphone-60x60.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/template/images/touch-icon-ipad-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/template/images/touch-icon-iphone-retina-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/template/images/touch-icon-ipad-retina-152x152.png">
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ( "serviceWorker" in navigator ) {
+            if ( !navigator.serviceWorker.controller ) {
+                navigator.serviceWorker
+                    .register("/sw.js", {
+                        scope: "./"
+                    })
+                    .then(function (reg) {
+
+                    });
+
+            }
+        }
+    </script>
 </head>
 <body>
 
     <form action="api.php" method="POST" class="search-form">
-        <input name="symptom" placeholder="Enter a symptom of your problem" class="search-form__text-input search-form__text-input--symptom" type="search">
+        <input name="symptom" placeholder="Enter a symptom of your problem" class="search-form__text-input search-form__text-input--symptom" type="search" aria-label="Enter a symptom of your problem in this input and press Enter key">
         <button type="submit" class="search-form__button search-form__button--submit">Search</button>
     </form>
 
