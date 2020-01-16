@@ -36,68 +36,27 @@ else {
 
 }
 $symptom = string_to_normal_string( $morphy, $request[ 'symptom' ] );
-$symptomParts = explode( ' ', $symptom );
-$symptomPartsCount = count( $symptomParts );
+$mysqliConnection = database_init( $config );
+$solutions = database_api_find_solutions( $mysqliConnection, $symptom );
 
-$results = [];
+# echo json_encode( $solutions );
 
-foreach ( $DB as $categoryKey => $category ) {
+$output = '';
 
-    foreach ( $category as $symptomAndSolutions ) {
+$previousSymptomId = null;
 
-        $countOfSymptomPartWasFound = 0;
-        $symptomAndSolutions[ 'symptomTmp' ] = string_to_normal_string( $morphy, $symptomAndSolutions[ 'symptom' ] );
-
-        foreach ( $symptomParts as $symptomPart ) {
-
-
-            if ( substr_count( $symptomAndSolutions[ 'symptomTmp' ], $symptomPart ) > 0 ) {
-
-                $countOfSymptomPartWasFound++;
-
-            }
-
+foreach ( $solutions as $solution ) {
+    if ( $solution[ 'symptomId' ] !== $previousSymptomId ) {
+        if ( ! empty( $output ) ) {
+            $output .= '</ul>';
         }
-
-        if ( $countOfSymptomPartWasFound === $symptomPartsCount ) {
-
-            if ( ! isset( $results[ $categoryKey ] ) ) {
-
-                $results[ $categoryKey ] = [];
-
-            }
-
-            $results[ $categoryKey ] = array_merge( $results[ $categoryKey ], [ $symptomAndSolutions ] );
-        }
-
+        $output .= '<h2 class="results__symptom results__symptom--' . $solution[ 'categoryName' ] . '" data-score="' . $solution[ 'score' ] . '">[' . $solution[ 'categoryName' ] . '] ' . htmlentities($solution[ 'symptomDescription' ]) . '</h2><ul class="results__solutions">';
     }
-
+    $previousSymptomId = $solution[ 'symptomId' ];
+    $output .= '<li class="results__solution">' . htmlentities($solution[ 'solutionDescription' ]) . '</li>';
 }
-
-# echo json_encode( $results );
-
-$output = [];
-
-foreach ( $results  as $category => $symptomsAndSolutions ) {
-
-    foreach ( $symptomsAndSolutions as $symptomAndSolutions ) {
-
-        $solutions = [];
-
-        foreach ( $symptomAndSolutions[ 'solutions' ] as $solution ) {
-
-            $solutions[] = '<li class="results__solution">' . $solution . '</li>';
-
-        }
-
-        $solutions = implode( '', $solutions );
-
-        $output[] = '<h2 class="results__symptom">[' . $category . '] ' . $symptomAndSolutions[ 'symptom' ] . '</h2><ul class="results__solutions">' . $solutions . '</ul>';
-
-    }
-
+if ( ! empty( $output ) ) {
+    $output .= '</ul>';
 }
-
-$output = implode( $output );
 
 echo $output;
