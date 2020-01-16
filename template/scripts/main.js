@@ -38,7 +38,7 @@ if( typeof window.fetch === 'function' ) {
                     resultsList.innerHTML = response;
                 }
                 else {
-                    resultsList.innerHTML = '<div class="results__error">Не удалось получить результаты поиска</div>';
+                    resultsList.innerHTML = '<div class="results__error">Sorry, no matches were found for your query.</div>';
                 }
 
                 banner.classList.add(bannerSmallClass);
